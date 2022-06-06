@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  mlflow:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_volume:/mlflow/
+volumes:
+  mlflow_volume:
