@@ -1,18 +1,22 @@
 version: "3.9"
 services:
   mlflow:
-    build: .
+    build:
+      context: .
+      args:
+        - BACKEND_STORE_URI='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}'
+        - MLFLOW_PORT=${MLFLOW_PORT}
     ports:
-      - "5000:5000"
+      - "${MLFLOW_PORT}:${MLFLOW_PORT}"
     volumes:
       - mlflow_volume:/mlflow/
   db:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     environment:
-      - POSTGRES_USER=mlflow_user
-      - POSTGRES_PASSWORD=mlflow_user
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_volume:/var/lib/postgresql/data
