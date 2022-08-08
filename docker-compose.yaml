@@ -6,5 +6,16 @@ services:
       - "5000:5000"
     volumes:
       - mlflow_volume:/mlflow/
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=mlflow_user
+      - POSTGRES_PASSWORD=mlflow_user
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_volume:/var/lib/postgresql/data
 volumes:
   mlflow_volume:
+  postgres_volume:
