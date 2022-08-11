@@ -2,14 +2,18 @@ FROM python:3.8-slim
 
 WORKDIR mlflow
 
-ARG BACKEND_STORE_URI='file:///mlflow/mlruns'
-ARG DEFAULT_ARTIFACT_ROOT='file:///mlflow/artifacts'
-ARG MLFLOW_PORT=5000
+
+ENV BACKEND_STORE_URI='file:///mlflow/mlruns'
+ENV DEFAULT_ARTIFACT_ROOT='file:///mlflow/artifacts'
+
+RUN mkdir "mlruns"
 
 RUN pip install mlflow psycopg2-binary
 
-EXPOSE ${MLFLOW_PORT}
+EXPOSE 5000
 
+COPY mlflow_init.sh .
 
-ENTRYPOINT ["mlflow", "server", "--host", "0.0.0.0", "--backend-store-uri", "${BACKEND_STORE_URI}", \
-    "-p", "5000","--default-artifact-root", "${DEFAULT_ARTIFACT_ROOT}"]
+RUN ["chmod", "+x", "/mlflow/mlflow_init.sh"]
+
+ENTRYPOINT ["./mlflow_init.sh"]
