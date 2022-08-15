@@ -6,9 +6,7 @@ WORKDIR mlflow
 ENV BACKEND_STORE_URI='file:///mlflow/mlruns'
 ENV DEFAULT_ARTIFACT_ROOT='file:///mlflow/artifacts'
 
-RUN mkdir "mlruns"
-
-RUN pip install mlflow psycopg2-binary
+RUN pip install mlflow psycopg2-binary boto3 azure-storage-blob
 
 EXPOSE 5000
 
